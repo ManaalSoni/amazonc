@@ -1,11 +1,34 @@
 const firebase = require("firebase")
-const firebaseConfig = require("./firebaseConfig.json")
-const fb = firebase.initializeApp(firebaseConfig)
-const db = fb.firestore()
+const dotenv = require('dotenv');
+dotenv.config();
+const {
+    API_KEY,
+    AUTH_DOMAIN,
+    PROJECT_ID,
+    STORAGE_BUCKET,
+    MESSAGING_SENDER_ID,
+    APP_ID,
+    MEASUREMENT_ID,
+} = process.env;
+
+const firebaseConfig = {
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID
+}
+
+const fb = firebase.initializeApp(firebaseConfig);
+const db = fb.firestore();
 
 async function addData(collection, id, data) {
-  if (id) await db.collection(collection).doc().set(data)
-  else await db.collection(collection).doc(id).set(data)
+  if (!id) 
+    await db.collection(collection).add(data);
+  else 
+    await db.collection(collection).doc(id).set(data);
 }
 
 async function updateData(collection, id, data) {

@@ -30,6 +30,9 @@ const upload = multer({
 
 function file_middleware(req, res, next) {
   upload(req, res, (err) => {
+    if(req.file){
+      req.body.image = req.file.filename;
+    }
     if (err)
       res.status(400).json({
         success: false,

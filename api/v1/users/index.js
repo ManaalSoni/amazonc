@@ -1,9 +1,14 @@
-const routes = require("express").Router()
+const router = require("express").Router();
 
-module.exports = () => {
-  routes.get("/", require("./get")()) //get current user
-  routes.post("/", require("./post")()) //signup {"name":"","username":"", "email": "", "password": "", "mobile": "", "userType": ""}
-  routes.post("/login", require("./login")()) //login {"email": "","password":""}
+const fileUpload = require("../../../middleware/fileUpload");
 
-  return routes
-}
+//get current user
+router.get("/", require("./get")) 
+
+//signup {"name":"","username":"", "email": "", "password": "", "mobile": "", "userType": ""}
+router.post("/", fileUpload, require("./post")) 
+
+//login {"email": "","password":""}
+router.post("/login", require("./login"));
+
+module.exports = router;
