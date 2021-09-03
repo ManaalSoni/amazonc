@@ -49,16 +49,9 @@ async function getCollectionData(collection) {
   return await db.collection(collection).get()
 }
 
-async function getDataOnCondition(collection, id, key, operator, value) {
-  let data = null
-  if (id)
-    data = await db
-      .collection(collection)
-      .doc(id)
-      .where(key, operator, value)
-      .get()
-  else data = await db.collection(collection).where(key, operator, value).get()
-  return data
+async function getDataOnCondition(collection, key, operator, value) {
+  const data = await db.collection(collection).where(key, operator, value).get();
+  return data;
 }
 
 async function getAllDataOnCondition(collection, key, operator, value) {
