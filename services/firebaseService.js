@@ -25,8 +25,10 @@ const fb = firebase.initializeApp(firebaseConfig);
 const db = fb.firestore();
 
 async function addData(collection, id, data) {
-  if (!id) 
-    await db.collection(collection).add(data);
+  if (!id) {
+    const res = await db.collection(collection).add(data);
+    return res.id;
+  }
   else 
     await db.collection(collection).doc(id).set(data);
 }
@@ -36,14 +38,14 @@ async function updateData(collection, id, data) {
 }
 
 async function deleteData(collection, id) {
-  await db.collection(collection).doc(id).get().delete()
+  await db.collection(collection).doc(id).delete()
 }
 
 async function getData(collection, id) {
   return await db.collection(collection).doc(id).get()
 }
 
-async function getAllData(collection) {
+async function getCollectionData(collection) {
   return await db.collection(collection).get()
 }
 
@@ -68,7 +70,7 @@ module.exports = {
   db,
   getData,
   getDataOnCondition,
-  getAllData,
+  getCollectionData,
   getAllDataOnCondition,
   addData,
   updateData,

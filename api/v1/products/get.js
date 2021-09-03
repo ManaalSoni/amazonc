@@ -1,3 +1,7 @@
 module.exports = (req, res) => {
-  res.send(200)
+  try {
+    
+  } catch (error) {
+    
+  }
 }

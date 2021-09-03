@@ -1,5 +1,7 @@
 const { firebase, addData } = require("../services/firebaseService");
 
+const COLLECTION_NAME = "users";
+
 async function createUser(data) {
 
   const { fullName, email, username, password, userType } = data;
@@ -17,7 +19,7 @@ async function createUser(data) {
   };
 
   const token = await userCredentials.user.getIdToken();
-  await addData("users", userCredentials.user.uid, user);
+  await addData(COLLECTION_NAME, userCredentials.user.uid, user);
 
   return { 
     user:{

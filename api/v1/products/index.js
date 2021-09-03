@@ -1,12 +1,40 @@
-const router = require("express").Router()
-const upload = require("../../../middleware/fileUpload")
+const router = require("express").Router();
+const { check } = require('express-validator');
+const fileUpload = require("../../../middleware/fileUpload");
 
-router.get("/", require("./get")) //all products list
+// create new product
+router.post(
+    "/", 
+    fileUpload,
+    [
+        check("name", "name is required").notEmpty(),
+        check("category", "category is required").notEmpty(),
+        check("price", "invalid field 'price'").notEmpty().isNumeric(),
+        check("featured", "invalid field 'featured'").notEmpty().isBoolean()
+    ],
+    require("./post")
+);
 
-router.get("/:id", require("./getProduct")) // specific product id with query param
+// read products list
+router.get("/", require("./get"));
 
-router.post("/", require("./post")) // insert new product details
+// read product by id
+router.get("/:id", require("./getById"));
 
-router.put("/", upload, require("./put")) // update product details
+// update product details
+router.put(
+    "/:id", 
+    fileUpload, 
+    [
+        check("name", "name is required").isEmpty(),
+        check("category", "category is required").isEmpty(),
+        check("price", "invalid field 'price'").optional().isNumeric(),
+        check("featured", "invalid field 'featured'").optional().isBoolean()
+    ],
+    require("./put")
+);
+
+//delete product
+router.delete("/:id", require("./delete"));
 
 module.exports = router;
