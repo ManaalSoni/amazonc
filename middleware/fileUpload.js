@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(
       null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+      "product"+file.fieldname + "-" + Date.now() + path.extname(file.originalname)
     );
   },
 });
@@ -30,6 +30,9 @@ const upload = multer({
 
 function file_middleware(req, res, next) {
   upload(req, res, (err) => {
+    if(req.file){
+      req.body.image = req.file.filename;
+    }
     if (err)
       res.status(400).json({
         success: false,
