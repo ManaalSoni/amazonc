@@ -18,8 +18,17 @@ router.post(
 // read products list
 router.get("/", require("./get"));
 
+// read featured products
+router.get("/featured", require("./getFeatured"));
+
 // read product by id
 router.get("/:id", require("./getById"));
+
+//read products by category
+router.get("/category/:categoryName", require("./getByCategory"));
+
+//read products by seller id
+router.get("/seller/:sellerId", require("./getBySeller"));
 
 // update product details
 router.put(
