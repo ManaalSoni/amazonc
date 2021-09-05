@@ -1,6 +1,7 @@
-const { createUser } = require("../../../services/userService");
-const DatabaseError = require("../../../helpers/DatabaseError");
 const { validationResult } = require("express-validator");
+const DatabaseError = require("../../../helpers/DatabaseError");
+require("dotenv").config();
+const { getUserByEmail } = require("../../../services/userService");
 
 module.exports = async (req, res) => {
   const errors = validationResult(req);
@@ -11,11 +12,10 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await createUser(req.body);
-    return res.status(200).send({
+    const user = await getUserByEmail(req.params.email);
+    return res.status(200).json({
       success: true,
-      message: "user account created",
-      user: result.user,
+      user,
     });
   } catch (error) {
     if (error instanceof DatabaseError) {
