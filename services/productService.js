@@ -1,4 +1,4 @@
-const { addData, getData, updateData, deleteData } = require("../services/firebaseService");
+const { addData, getData, updateData, deleteData, getDataOnCondition } = require("../services/firebaseService");
 const DatabaseError = require("../helpers/DatabaseError");
 
 const COLLECTION_NAME = "products";
@@ -27,8 +27,63 @@ const addProduct = async (data) => {
 }
 
 const getProductById = async (id) => {
-    const result = await getData("products", id);
-    return result.data();
+    try {
+        const result = await getData(COLLECTION_NAME, id);    
+        return result.data();
+    } catch (error) {
+        throw new DatabaseError("Product could not be retreived");
+    }
+}
+
+const getFeaturedProducts = async() => {
+    try {
+        const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "featured", "==", true);
+        if(querySnapshot.empty) return null;
+        const result = [];
+        querySnapshot.forEach(doc => {
+            result.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        return result;
+    } catch (error) {
+        throw new DatabaseError("Product could not be retreived");
+    }
+}
+
+const getProductsByCategory = async(category) => {
+    try {
+        const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "category", "==", category);
+        if(querySnapshot.empty) return null;
+        const result = [];
+        querySnapshot.forEach(doc => {
+            result.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        return result;   
+    } catch (error) {
+        throw new DatabaseError("Product could not be retreived");
+    }
+}
+
+const getSellerProducts = async(sellerId) => {
+    try {
+        const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "sellerId", "==", sellerId);
+        if(querySnapshot.empty) return null;
+        const result = [];
+        querySnapshot.forEach(doc => {
+            result.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        return result;
+    } catch (error) {
+        throw new DatabaseError("Product could not be retreived");
+    }
 }
 
 const editProductById = async (id, data) => {
@@ -50,7 +105,7 @@ const editProductById = async (id, data) => {
 
 const deleteProductById = async (id) => {
     try {
-        await deleteData("products", id);
+        await deleteData(COLLECTION_NAME, id);
     } catch (error) {
         console.log(error);
         throw new DatabaseError("Product could not be deleted");
@@ -60,6 +115,9 @@ const deleteProductById = async (id) => {
 module.exports = {
     addProduct,
     getProductById,
+    getFeaturedProducts,
+    getProductsByCategory,
+    getSellerProducts,
     editProductById,
     deleteProductById
 }

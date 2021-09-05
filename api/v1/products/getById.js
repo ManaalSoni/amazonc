@@ -7,10 +7,16 @@ module.exports = async(req, res) => {
 
     const product = await getProductById(id);
 
+    if(!product){
+      return res.status(404).json({
+        success: false,
+        message: "The requested product does not exist"
+      });
+    }
     return res.status(200).json({
       success: true,
       product
-    })
+    });
   } catch (error) {
     if( error instanceof DatabaseError )
       return res.status(400).json({
