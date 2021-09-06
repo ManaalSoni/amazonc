@@ -11,8 +11,7 @@ module.exports = async (req, res) => {
         message: errors.array()[0].msg
       });
     }
-
-    const result = await addProduct(req.body);
+    const result = await addProduct(req.body, req.user.id);
 
     return res.status(201).json({
       success: true,
