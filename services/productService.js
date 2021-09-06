@@ -3,12 +3,14 @@ const DatabaseError = require("../helpers/DatabaseError");
 
 const COLLECTION_NAME = "products";
 
-const addProduct = async (data) => {
+const addProduct = async (data, userId) => {
 
     const { category, name, price, description, image, featured } = data;
 
     const newProduct = {
-        category, name, price, description, image, featured
+        category, name, price, description, image, 
+        featured: Boolean(featured),
+        sellerId: userId
     }
 
     try {
@@ -22,13 +24,14 @@ const addProduct = async (data) => {
         }
 
     } catch (error) {
+        console.log(error);
         throw new DatabaseError("Product could not be added");
     }
 }
 
 const getProductById = async (id) => {
     try {
-        const result = await getData(COLLECTION_NAME, id);    
+        const result = await getData(COLLECTION_NAME, id);
         return result.data();
     } catch (error) {
         throw new DatabaseError("Product could not be retreived");
@@ -94,7 +97,7 @@ const editProductById = async (id, data) => {
     if(price) fieldsToEdit.price = price;
     if(description) fieldsToEdit.description = description;
     if(image) fieldsToEdit.image = image;
-    if(featured) fieldsToEdit.featured = featured;
+    if(featured!==null || featured!==undefined) fieldsToEdit.featured = (featured===true||featured==="true");
 
     try {
         await updateData(COLLECTION_NAME, id, fieldsToEdit);
