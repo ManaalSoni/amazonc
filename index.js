@@ -12,6 +12,13 @@ app.use(bodyParser.json({ extended: true }));
 
 app.use("/api/v1", routeController);
 
+// DUMMY DATA CODE
+// const { addDataToDB } = require("./dummy/addData");
+// const categories = require("./dummy/categories.json");
+// app.post("/api/v1/dummy", async(req, res)=>{
+//   addDataToDB(categories, "categories");
+//   return res.sendStatus(200);
+// });
 
 const port = process.env.PORT;
 
