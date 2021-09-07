@@ -13,6 +13,12 @@ module.exports = async (req, res) => {
     }
 
     const product = await getProductById(req.params.id);
+    if(!product){
+      return res.status(403).json({
+          success: false,
+          message: "This action is not possible"
+      });    
+    }
     if(product && product.sellerId!=req.user.id){
       return res.status(403).json({
         success: false,

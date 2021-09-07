@@ -11,7 +11,9 @@ router.post(
     [
         check("name", "name is required").notEmpty(),
         check("category", "category is required").notEmpty(),
+        check("description", "description is required").notEmpty(),
         check("price", "invalid field 'price'").notEmpty().isNumeric(),
+        check("image", "image is required").notEmpty(),
         check("featured", "invalid field 'featured'").notEmpty().isBoolean()
     ],
     require("./post")
