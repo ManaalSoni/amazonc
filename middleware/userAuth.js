@@ -8,12 +8,16 @@ function userAuth(req, res, next) {
   if (token == null) {
     return res.sendStatus(401);
   } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-      const userObject = user ? await getUserById(user.id) : null;
-      if (err || !userObject.exists) {
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
+      const user = decoded ? await getUserById(decoded.id) : null;
+      if (err || user == null) {
         return res.sendStatus(403);
       } else {
-        req.user = user;
+        req.user = {
+          id: user.id,
+          email: user.email
+        };
         next();
       }
     });

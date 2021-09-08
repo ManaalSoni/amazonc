@@ -1,38 +1,43 @@
 const router = require("express").Router();
 const { check } = require('express-validator');
 const fileUpload = require("../../../middleware/fileUpload");
+const userAuth = require("../../../middleware/userAuth");
 
 // create new product
 router.post(
     "/", 
+    userAuth,
     fileUpload,
     [
         check("name", "name is required").notEmpty(),
         check("category", "category is required").notEmpty(),
+        check("description", "description is required").notEmpty(),
         check("price", "invalid field 'price'").notEmpty().isNumeric(),
+        check("image", "image is required").notEmpty(),
         check("featured", "invalid field 'featured'").notEmpty().isBoolean()
     ],
     require("./post")
 );
 
 // read products list
-router.get("/", require("./get"));
+router.get("/", userAuth, require("./get"));
 
 // read featured products
-router.get("/featured", require("./getFeatured"));
+router.get("/featured", userAuth, require("./getFeatured"));
 
 // read product by id
-router.get("/:id", require("./getById"));
+router.get("/:id", userAuth, require("./getById"));
 
 //read products by category
-router.get("/category/:categoryName", require("./getByCategory"));
+router.get("/category/:categoryName", userAuth, require("./getByCategory"));
 
 //read products by seller id
-router.get("/seller/:sellerId", require("./getBySeller"));
+router.get("/seller/:sellerId", userAuth, require("./getBySeller"));
 
 // update product details
 router.put(
     "/:id", 
+    userAuth,
     fileUpload, 
     [
         check("name", "name is required").isEmpty(),
@@ -44,6 +49,6 @@ router.put(
 );
 
 //delete product
-router.delete("/:id", require("./delete"));
+router.delete("/:id", userAuth, require("./delete"));
 
 module.exports = router;

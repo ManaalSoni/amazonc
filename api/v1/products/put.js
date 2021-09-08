@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { editProductById } = require("../../../services/productService");
+const { editProductById, getProductById } = require("../../../services/productService");
 const DatabaseError = require("../../../helpers/DatabaseError");
 
 module.exports = async (req, res) => {
@@ -10,6 +10,20 @@ module.exports = async (req, res) => {
         success: false,
         message: errors.array()[0].msg
       });
+    }
+
+    const product = await getProductById(req.params.id);
+    if(!product){
+      return res.status(403).json({
+          success: false,
+          message: "This action is not possible"
+      });    
+    }
+    if(product && product.sellerId!=req.user.id){
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to perform this action"
+      })
     }
 
     await editProductById(req.params.id, req.body);
