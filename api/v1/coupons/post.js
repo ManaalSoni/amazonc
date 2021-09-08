@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     if (result.exists) {
       res.status(200).send({
         success: false,
-        message: "coupon already exists",
+        message: "Coupon already exists",
         id: result.id,
       });
     } else {
@@ -26,6 +26,7 @@ module.exports = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     if (error instanceof DatabaseError) {
       return res.status(502).send({
         success: false,

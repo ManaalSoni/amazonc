@@ -20,7 +20,7 @@ async function addCoupon(newCoupon, sellerId) {
 
   let exists = false;
   const coupon = result.docs[0];
-  if (coupon?.data().sellerId == sellerId) exists = true;
+  if (coupon && coupon.data().sellerId == sellerId) exists = true;
   if (exists)
     return {
       exists,

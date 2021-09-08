@@ -13,9 +13,15 @@ module.exports = async (req, res) => {
   }
   try {
     const result = await getUserById(req.user.id);
+    if(!result){
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
     return res.status(200).json({
       success: true,
-      user: result.user,
+      user: result,
     });
   } catch (error) {
     if (error instanceof DatabaseError) {
