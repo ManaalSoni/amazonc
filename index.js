@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const routeController = require("./api/v1");
-
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
