@@ -12,16 +12,16 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await auth(req.body.email);
-    if (result.exists)
+    const result = await auth(req.body);
+    if (result)
       return res.status(200).json({
         success: true,
-        token: result.token,
+        token: result,
       });
     else
       return res.status(200).json({
         success: false,
-        message: "user not found",
+        message: "User not found",
       });
   } catch (error) {
     if (error instanceof DatabaseError) {
@@ -30,6 +30,7 @@ module.exports = async (req, res) => {
         message: error.message,
       });
     } else {
+      console.log(error);
       return res.status(500).send({
         success: false,
         message: "Server Error",

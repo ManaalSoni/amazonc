@@ -10,6 +10,13 @@ module.exports = async (req, res) => {
       message: errors.array()[0].msg,
     });
   }
+  const {condition, quantity} = req.body;
+  if(!condition && !quantity){
+    return res.status(400).send({
+      success: false,
+      message: "Invalid request"
+    });
+  }
   try {
     const exists = await updateCart(
       req.body,

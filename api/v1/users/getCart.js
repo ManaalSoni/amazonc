@@ -18,6 +18,7 @@ module.exports = async (req, res) => {
       cart,
     });
   } catch (error) {
+    console.log(error);
     if (error instanceof DatabaseError) {
       return res.status(502).send({
         success: false,

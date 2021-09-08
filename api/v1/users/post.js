@@ -12,16 +12,16 @@ module.exports = async (req, res) => {
   }
   try {
     const result = await createUser(req.body);
-    if (!result.exists)
+    if (result)
       return res.status(200).send({
         success: true,
-        message: "user account created",
-        user: result.user,
+        message: `User account created with id ${result.id}`,
+        user: result,
       });
     else
       return res.status(200).send({
         success: false,
-        message: "user already exists",
+        message: "Email already exists",
       });
   } catch (error) {
     if (error instanceof DatabaseError) {
