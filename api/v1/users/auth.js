@@ -1,6 +1,5 @@
 const { validationResult } = require("express-validator");
 const DatabaseError = require("../../../helpers/DatabaseError");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { auth } = require("../../../services/userService");
 
@@ -13,11 +12,17 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const token = await auth(req.body);
-    return res.status(200).json({
-      success: true,
-      token,
-    });
+    const result = await auth(req.body.email);
+    if (result.exists)
+      return res.status(200).json({
+        success: true,
+        token: result.token,
+      });
+    else
+      return res.status(200).json({
+        success: false,
+        message: "user not found",
+      });
   } catch (error) {
     if (error instanceof DatabaseError) {
       return res.status(502).send({

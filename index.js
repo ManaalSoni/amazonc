@@ -5,13 +5,12 @@ const routeController = require("./api/v1");
 require("dotenv").config();
 
 const app = express();
-
 app.use(express.static("./public/uploads"));
 app.use(bodyParser.json({ extended: true }));
 
+app.use(cors());
 
 app.use("/api/v1", routeController);
-
 
 const port = process.env.PORT;
 

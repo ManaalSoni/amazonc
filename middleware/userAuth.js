@@ -10,7 +10,7 @@ function userAuth(req, res, next) {
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
       const userObject = user ? await getUserById(user.id) : null;
-      if (err || userObject == null) {
+      if (err || !userObject.exists) {
         return res.sendStatus(403);
       } else {
         req.user = user;
