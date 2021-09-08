@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
 const userAuth = require("../../../middleware/userAuth");
+const typeCheck = require("../../../middleware/typeCheck");
 
 //add coupon
 router.post(
@@ -9,6 +10,7 @@ router.post(
   check("description", "name is required").notEmpty(),
   check("discount_rate", "invalid field 'price'").isNumeric(),
   userAuth,
+  typeCheck,
   require("./post")
 );
 

@@ -9,7 +9,7 @@ require("dotenv").config();
 const COLLECTION_NAME = "coupons";
 
 async function addCoupon(newCoupon, sellerId) {
-  newCoupon.discount_rate = Number(newCoupon.discount_rate);
+  newCoupon.discount_rate = newCoupon.discount_rate;
   const { code, description, discount_rate } = newCoupon;
   let result = null;
   try {

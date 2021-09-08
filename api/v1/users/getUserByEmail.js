@@ -12,11 +12,11 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await getUserByEmail(req.params.email);
-    if (result)
+    const user = await getUserByEmail(req.params.email);
+    if (user)
       return res.status(200).json({
         success: true,
-        user: result,
+        user,
       });
     else
       return res.status(200).json({

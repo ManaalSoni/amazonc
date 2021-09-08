@@ -12,11 +12,11 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await getUserById(req.params.id);
-    if (result)
+    const user = await getUserById(req.params.id);
+    if (user)
       return res.status(200).json({
         success: true,
-        user: user,
+        user,
       });
     else
       return res.status(200).json({

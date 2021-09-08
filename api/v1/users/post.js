@@ -11,12 +11,12 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await createUser(req.body);
-    if (result)
+    const user = await createUser(req.body);
+    if (user)
       return res.status(200).send({
         success: true,
-        message: `User account created with id ${result.id}`,
-        user: result,
+        message: `User account created with id ${user.id}`,
+        user,
       });
     else
       return res.status(200).send({

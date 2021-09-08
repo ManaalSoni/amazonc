@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
 const userAuth = require("../../../middleware/userAuth");
+const typeCheck = require("../../../middleware/typeCheck");
 
 //get current user
 router.get("/", userAuth, require("./get"));
@@ -24,7 +25,10 @@ router.put(
   [
     check("email", "Cannot update email").isEmpty(),
     check("cart", "Cannot update cart").not().exists(),
-    check("userType", "invalid field 'userType'").optional().isArray().notEmpty(),
+    check("userType", "invalid field 'userType'")
+      .optional()
+      .isArray()
+      .notEmpty(),
   ],
   require("./put")
 );
@@ -52,6 +56,7 @@ router.post(
     check("price").isNumeric(),
     check("quantity").isNumeric(),
   ],
+  typeCheck,
   require("./addToCart")
 );
 
@@ -66,6 +71,7 @@ router.put(
     check("quantity", "invalid field 'quantity'").optional().isNumeric(),
     check("condition", "invalid field 'condition'").optional().isNumeric(),
   ],
+  typeCheck,
   require("./UpdateCart")
 );
 

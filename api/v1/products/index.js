@@ -1,22 +1,24 @@
 const router = require("express").Router();
-const { check } = require('express-validator');
+const { check } = require("express-validator");
 const fileUpload = require("../../../middleware/fileUpload");
 const userAuth = require("../../../middleware/userAuth");
+const typeCheck = require("../../../middleware/typeCheck");
 
 // create new product
 router.post(
-    "/", 
-    userAuth,
-    fileUpload,
-    [
-        check("name", "name is required").notEmpty(),
-        check("category", "category is required").notEmpty(),
-        check("description", "description is required").notEmpty(),
-        check("price", "invalid field 'price'").notEmpty().isNumeric(),
-        check("image", "image is required").notEmpty(),
-        check("featured", "invalid field 'featured'").notEmpty().isBoolean()
-    ],
-    require("./post")
+  "/",
+  userAuth,
+  fileUpload,
+  [
+    check("name", "name is required").notEmpty(),
+    check("category", "category is required").notEmpty(),
+    check("description", "description is required").notEmpty(),
+    check("price", "invalid field 'price'").notEmpty().isNumeric(),
+    check("image", "image is required").notEmpty(),
+    check("featured", "invalid field 'featured'").notEmpty().isBoolean(),
+  ],
+  typeCheck,
+  require("./post")
 );
 
 // read products list
@@ -36,16 +38,17 @@ router.get("/seller/:sellerId", userAuth, require("./getBySeller"));
 
 // update product details
 router.put(
-    "/:id", 
-    userAuth,
-    fileUpload, 
-    [
-        check("name", "name is required").isEmpty(),
-        check("category", "category is required").isEmpty(),
-        check("price", "invalid field 'price'").optional().isNumeric(),
-        check("featured", "invalid field 'featured'").optional().isBoolean()
-    ],
-    require("./put")
+  "/:id",
+  userAuth,
+  fileUpload,
+  [
+    check("name", "name is required").isEmpty(),
+    check("category", "category is required").isEmpty(),
+    check("price", "invalid field 'price'").optional().isNumeric(),
+    check("featured", "invalid field 'featured'").optional().isBoolean(),
+  ],
+  typeCheck,
+  require("./put")
 );
 
 //delete product

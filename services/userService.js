@@ -3,7 +3,6 @@ const {
   getData,
   getDataOnCondition,
   updateData,
-  deleteData,
 } = require("../services/firebaseService");
 const DatabaseError = require("../helpers/DatabaseError");
 const jwt = require("jsonwebtoken");
@@ -11,9 +10,8 @@ require("dotenv").config();
 
 const COLLECTION_NAME = "users";
 
-
 async function createUser(data) {
-  const { fullName, email, username, userType } = data;
+  const { fullName, email, username, userType, id } = data;
 
   let userObject = {
     fullName,
@@ -26,21 +24,16 @@ async function createUser(data) {
   try {
     const result = await getUserByEmail(email);
     if (result) return null;
-    const id = await addData(COLLECTION_NAME, null, userObject);
+    await addData(COLLECTION_NAME, id, userObject);
     return {
       id,
-      ...userObject
+      ...userObject,
     };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw new DatabaseError("user could not be created");
   }
-  return {
-    exists: false,
-    user: userObject,
-  };
 }
-
 
 async function auth(data) {
   let { email } = data;
@@ -58,7 +51,7 @@ async function auth(data) {
     throw new DatabaseError("Failed to retrieve user");
   }
 
-  if(!user){
+  if (!user) {
     return null;
   }
   const userToken = {
@@ -71,7 +64,6 @@ async function auth(data) {
   });
   return token;
 }
-
 
 async function getUserById(id) {
   try {
@@ -92,11 +84,11 @@ async function getUserByEmail(email) {
       email
     );
     const user = result.docs[0];
-    if (!user)
-      return null;
+    if (!user) return null;
     else
-      return { 
-        ...user.data(), id: user.id 
+      return {
+        ...user.data(),
+        id: user.id,
       };
   } catch (error) {
     throw new DatabaseError("Failed to retrieve user");
@@ -112,8 +104,8 @@ async function updateUser(data, userId) {
 }
 
 async function addToCart(newCartItem, userId) {
-  newCartItem.price = Number(newCartItem.price);
-  newCartItem.quantity = Number(newCartItem.quantity);
+  newCartItem.price = newCartItem.price;
+  newCartItem.quantity = newCartItem.quantity;
 
   let result = null;
   try {
@@ -122,7 +114,7 @@ async function addToCart(newCartItem, userId) {
     throw new DatabaseError("Product could not be added to cart");
   }
   let cart = result.data().cart;
-  if(!cart){
+  if (!cart) {
     cart = [];
   }
   let exists = false;
@@ -170,18 +162,18 @@ async function updateCart(data, productId, userId) {
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
       if (item.productId == productId) {
-        cart[i] = { ...item, quantity: Number(data.quantity) };
+        cart[i] = { ...item, quantity: data.quantity };
         exists = true;
         break;
       }
     }
     newCart = cart;
-  } else if(data.condition) {
+  } else if (data.condition) {
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
       if (item.productId == productId) {
         exists = true;
-        const condition = Number(data.condition) <= 0 ? 0 : 1;
+        const condition = data.condition <= 0 ? 0 : 1;
         if (condition) {
           newCart.push({ ...item, quantity: item.quantity + 1 });
         } else {
@@ -241,5 +233,5 @@ module.exports = {
   addToCart,
   getCart,
   updateCart,
-  deleteFromCart
+  deleteFromCart,
 };
