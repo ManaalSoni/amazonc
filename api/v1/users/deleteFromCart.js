@@ -1,6 +1,6 @@
-const { createUser } = require("../../../services/userService");
-const DatabaseError = require("../../../helpers/DatabaseError");
 const { validationResult } = require("express-validator");
+const { deleteFromCart } = require("../../../services/userService");
+const DatabaseError = require("../../../helpers/DatabaseError");
 
 module.exports = async (req, res) => {
   const errors = validationResult(req);
@@ -11,17 +11,16 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await createUser(req.body);
-    if (!result.exists)
-      return res.status(200).send({
+    const exists = await deleteFromCart(req.params.productId, req.user.id);
+    if (exists)
+      res.status(200).send({
         success: true,
-        message: "user account created",
-        user: result.user,
+        message: "product removed from cart",
       });
     else
       return res.status(200).send({
         success: false,
-        message: "user already exists",
+        message: "product not found in cart",
       });
   } catch (error) {
     if (error instanceof DatabaseError) {

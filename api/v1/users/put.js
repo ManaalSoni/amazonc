@@ -17,7 +17,6 @@ module.exports = async (req, res) => {
       message: "user account updated",
     });
   } catch (error) {
-    console.log(error);
     if (error instanceof DatabaseError) {
       return res.status(502).send({
         success: false,

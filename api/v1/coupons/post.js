@@ -1,4 +1,4 @@
-const { createUser } = require("../../../services/userService");
+const { addCoupon } = require("../../../services/couponService");
 const DatabaseError = require("../../../helpers/DatabaseError");
 const { validationResult } = require("express-validator");
 
@@ -11,18 +11,20 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const result = await createUser(req.body);
-    if (!result.exists)
+    const result = await addCoupon(req.body, req.user.id);
+    if (result.exists) {
+      res.status(200).send({
+        success: false,
+        message: "coupon already exists",
+        id: result.id,
+      });
+    } else {
       return res.status(200).send({
         success: true,
-        message: "user account created",
-        user: result.user,
+        message: "coupon added",
+        id: result.id,
       });
-    else
-      return res.status(200).send({
-        success: false,
-        message: "user already exists",
-      });
+    }
   } catch (error) {
     if (error instanceof DatabaseError) {
       return res.status(502).send({

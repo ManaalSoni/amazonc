@@ -12,10 +12,10 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const user = await getUserById(req.user.id);
+    const result = await getUserById(req.user.id);
     return res.status(200).json({
-      succes: true,
-      user,
+      success: true,
+      user: result.user,
     });
   } catch (error) {
     if (error instanceof DatabaseError) {

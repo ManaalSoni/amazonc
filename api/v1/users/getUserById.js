@@ -12,11 +12,17 @@ module.exports = async (req, res) => {
     });
   }
   try {
-    const user = await getUserById(req.params.id);
-    return res.status(200).json({
-      succes: true,
-      user,
-    });
+    const result = await getUserById(req.params.id);
+    if (result.exists)
+      return res.status(200).json({
+        success: true,
+        user: result.user,
+      });
+    else
+      return res.status(200).json({
+        success: false,
+        message: "user not found",
+      });
   } catch (error) {
     if (error instanceof DatabaseError) {
       return res.status(502).send({
