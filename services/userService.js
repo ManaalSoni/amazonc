@@ -46,18 +46,6 @@ async function updateUser(data, userId) {
   }
 }
 
-async function updateUser(data, userId) {
-  const { fullName, userType } = data;
-  try {
-    await updateData(COLLECTION_NAME, userId, {
-      fullName,
-      userType,
-    });
-  } catch (error) {
-    throw new DatabaseError("user could not be updated");
-  }
-}
-
 async function auth(data) {
   const { email, id } = data;
 
