@@ -1,5 +1,6 @@
 const { deleteProductById, getProductById } = require("../../../services/productService");
 const DatabaseError = require("../../../helpers/DatabaseError");
+const { deleteAllReviews } = require("../../../services/reviewService");
 
 module.exports = async(req, res) => {
     try {
@@ -19,6 +20,7 @@ module.exports = async(req, res) => {
             });
         }
         await deleteProductById(id);
+        await deleteAllReviews(id);
 
         return res.status(200).json({
             success: true,

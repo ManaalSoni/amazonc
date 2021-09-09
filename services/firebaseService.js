@@ -37,6 +37,18 @@ async function updateData(collection, id, data) {
   await db.collection(collection).doc(id).update(data)
 }
 
+async function addToArray(collection, id, fieldName, data) {
+  await db.collection(collection).doc(id).update({
+    [fieldName]: firebase.firestore.FieldValue.arrayUnion(data)
+  });
+}
+
+async function removeFromArray(collection, id, fieldName, data) {
+  await db.collection(collection).doc(id).update({
+    [fieldName]: firebase.firestore.FieldValue.arrayRemove(data)
+  });
+}
+
 async function deleteData(collection, id) {
   await db.collection(collection).doc(id).delete()
 }
@@ -67,5 +79,7 @@ module.exports = {
   getAllDataOnCondition,
   addData,
   updateData,
+  addToArray,
+  removeFromArray,
   deleteData,
 }
