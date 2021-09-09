@@ -7,8 +7,8 @@ const COLLECTION_NAME = "categories";
 const getCategories = async() => {
     try {
         const querySnapshot = await getCollectionData(COLLECTION_NAME);
-        if(querySnapshot.empty) return null;
         const result = [];
+        if(querySnapshot.empty) return result;
         querySnapshot.forEach(doc => {
             result.push({
                 id: doc.id,

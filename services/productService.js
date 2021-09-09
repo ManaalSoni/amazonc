@@ -41,8 +41,8 @@ const getProductById = async (id) => {
 const getFeaturedProducts = async() => {
     try {
         const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "featured", "==", true);
-        if(querySnapshot.empty) return null;
         const result = [];
+        if(querySnapshot.empty) return result;
         querySnapshot.forEach(doc => {
             result.push({
                 id: doc.id,
@@ -58,8 +58,8 @@ const getFeaturedProducts = async() => {
 const getProductsByCategory = async(category) => {
     try {
         const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "category", "==", category);
-        if(querySnapshot.empty) return null;
         const result = [];
+        if(querySnapshot.empty) return result;
         querySnapshot.forEach(doc => {
             result.push({
                 id: doc.id,
@@ -75,8 +75,8 @@ const getProductsByCategory = async(category) => {
 const getSellerProducts = async(sellerId) => {
     try {
         const querySnapshot = await getDataOnCondition(COLLECTION_NAME, "sellerId", "==", sellerId);
-        if(querySnapshot.empty) return null;
         const result = [];
+        if(querySnapshot.empty) return result;
         querySnapshot.forEach(doc => {
             result.push({
                 id: doc.id,
