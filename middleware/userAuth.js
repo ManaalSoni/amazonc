@@ -16,7 +16,8 @@ function userAuth(req, res, next) {
       } else {
         req.user = {
           id: user.id,
-          email: user.email
+          email: user.email,
+          fullName: user.fullName
         };
         next();
       }

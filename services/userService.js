@@ -56,6 +56,7 @@ async function auth(data) {
   }
   const userToken = {
     email: user.data().email,
+    fullName: user.data().fullName,
     id: user.id,
   };
 
