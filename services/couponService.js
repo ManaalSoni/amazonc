@@ -3,6 +3,7 @@ const {
   getData,
   getDataOnCondition,
   deleteData,
+  getCollectionData,
 } = require("../services/firebaseService");
 const DatabaseError = require("../helpers/DatabaseError");
 require("dotenv").config();
@@ -53,6 +54,23 @@ async function getCouponById(id) {
   }
 }
 
+async function getAllCoupons() {
+  try {
+    const result = await getCollectionData(COLLECTION_NAME);
+    const docs = result.docs;
+    const coupons = [];
+    docs
+      ? docs.forEach((coupon) => {
+        coupons.push({ ...coupon.data(), id: coupon.id });
+      })
+      : null;
+    if (coupons.length != 0) return { exists: true, coupons };
+    return { exists: false, coupons };
+  } catch (error) {
+    throw new DatabaseError(" Fail to retrieve coupon");
+  }
+}
+
 async function getCouponBySellerId(id) {
   let result = null;
   try {
@@ -64,8 +82,8 @@ async function getCouponBySellerId(id) {
   const coupons = [];
   docs
     ? docs.forEach((coupon) => {
-        coupons.push({ ...coupon.data(), id: coupon.id });
-      })
+      coupons.push({ ...coupon.data(), id: coupon.id });
+    })
     : null;
   if (coupons.length != 0) return { exists: true, coupons };
   return { exists: false, coupons };
@@ -102,4 +120,5 @@ module.exports = {
   getCouponById,
   getCouponBySellerId,
   deleteCoupon,
+  getAllCoupons,
 };

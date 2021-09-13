@@ -14,6 +14,8 @@ router.post(
   require("./post")
 );
 
+router.get("/all", userAuth, require("./getAllCoupons"));
+
 //get current seller coupon
 router.get("/", userAuth, require("./get"));
 
